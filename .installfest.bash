@@ -124,35 +124,35 @@ echo ""
 # utils/log_screen.sh
 
 function show () {
-  echo -e "${BG_WHITE}${BLACK}> $* ${RESET}"
+  echo -e "${WHITE}> $* ${RESET}"
 }
 
 function inform () {
   if [[ $2 ]]; then echo ""; fi
-  echo -e "${BG_GREEN}${BLACK}${BOLD}>>>>  $1 ${RESET}"
+  echo -e "${GREEN}${BOLD}>>>>  $1 ${RESET}"
 }
 
 function warn () {
   if [[ $2 ]]; then echo ""; fi
-  echo -e "${BG_YELLOW}${BLACK}${BOLD}>>>>  $1 ${RESET}"
+  echo -e "${YELLOW}${BOLD}>>>>  $1 ${RESET}"
 }
 
 function fail () {
   if [[ $2 ]]; then echo ""; fi
-  echo -e "${BG_RED}${WHITE}${BOLD}>>>>  $1 ${RESET}"
+  echo -e "${RED}${BOLD}>>>>  $1 ${RESET}"
 }
 
 function pause_awhile () {
   if [[ $2 ]]; then echo ""; fi
-  echo -e "${BG_YELLOW}${BLACK}${BOLD}>>>>  $1 ${RESET}"
-  read -p "${BG_YELLOW}${BLACK}${BOLD}Press <Enter> to continue.${RESET}"
+  echo -e "${YELLOW}${BOLD}>>>>  $1 ${RESET}"
+  read -p "${YELLOW}${BOLD}Press <Enter> to continue.${RESET}"
 }
 
 function pause_and_warn () {
   if [[ $2 ]]; then echo ""; fi
-  echo -e "${BG_YELLOW}${BLACK}${BOLD}>>>>  $1 ${RESET}"
-  echo -e "${BG_YELLOW}${BLACK}${BOLD}>>>> ${RESET}"
-  read -p "${BG_YELLOW}${BLACK}${BOLD}>>>>  Continue? [Yy] ${RESET} " -n 1 -r
+  echo -e "${YELLOW}${BOLD}>>>>  $1 ${RESET}"
+  echo -e "${YELLOW}${BOLD}>>>> ${RESET}"
+  read -p "${YELLOW}${BOLD}>>>>  Continue? [Yy] ${RESET} " -n 1 -r
 
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     fail "Exiting..." true
@@ -180,17 +180,16 @@ inform "Enter your computer's password so that " true
 inform "  we can make the necessary changes. "
 inform "  The password will not be visible as you type: "
 
-sudo -p "Password:" echo "${BG_WHITE}> Thank you! ${RESET}"
+sudo -p "Password:" echo "${WHITE}> Thank you! ${RESET}"
 
 # mac/os_version.sh
-
-# Determine OS version
-OS_VERSION=$(sw_vers -productVersion)
-
 
 #-------------------------------------------------------------------------------
 # Ensure that the user's computer set up works (mac/os_ensure_valid_setup.sh)
 #-------------------------------------------------------------------------------
+
+# Determine OS version
+OS_VERSION=$(sw_vers -productVersion)
 
 COMP_NAME=$(scutil --get ComputerName)
 LOCL_NAME=$(scutil --get LocalHostName)
@@ -203,6 +202,9 @@ MAC_ADDRS=$(ifconfig en0 | grep ether | sed -e 's/^[ \t|ether|\s|\n]*//')
 
 DESCRIPTION=`cat << EOFS
       Computer Type:   Mac OS $OS_VERSION
+
+      OS Number: $OS_NUMBER
+
       Short user name: $USER_NAME
 
       Long user name:  $FULL_NAME
@@ -280,50 +282,50 @@ inform "Running software update on Mac OS... " true
 sudo softwareupdate -i -r --ignore iTunes > /dev/null 2>&1
 show "Software updated!"
 
-#-------------------------------------------------------------------------------
-# Check for & install commandline tools (mac/os_install_commandline_tools.sh)
-#-------------------------------------------------------------------------------
+# #-------------------------------------------------------------------------------
+# # Check for & install commandline tools (mac/os_install_commandline_tools.sh)
+# #-------------------------------------------------------------------------------
 
-inform "Checking for XCode Command Line Tools..." true
+# inform "Checking for XCode Command Line Tools..." true
 
-# Check that command line tools are installed
-case $OS_VERSION in
-  *10.12*) cmdline_version="CLTools_Executables" ;; # Sierra
-  *10.11*) cmdline_version="CLTools_Executables" ;; # El Capitan
-  *10.10*) cmdline_version="CLTools_Executables" ;; # Yosemite
-  *10.9*)  cmdline_version="CLTools_Executables" ;; # Mavericks
-  *10.8*)  cmdline_version="DeveloperToolsCLI"   ;; # Mountain Lion
-  *10.7*)  cmdline_version="DeveloperToolsCLI"   ;; # Lion
-  *10.6*)  cmdline_version="DeveloperToolsCLILeo"
-           fail "Outdated OS. Considering upgrading before continuing." true;; # Snow Leopard
-           # Force the user to upgrade if they're below 10.6
-  *) fail "Sorry! You'll have to upgrade your OS to $MINIMUM_MAC_OS or above." true; exit 1;;
-esac
+# # Check that command line tools are installed
+# case $OS_VERSION in
+#   *10.12*) cmdline_version="CLTools_Executables" ;; # Sierra
+#   *10.11*) cmdline_version="CLTools_Executables" ;; # El Capitan
+#   *10.10*) cmdline_version="CLTools_Executables" ;; # Yosemite
+#   *10.9*)  cmdline_version="CLTools_Executables" ;; # Mavericks
+#   *10.8*)  cmdline_version="DeveloperToolsCLI"   ;; # Mountain Lion
+#   *10.7*)  cmdline_version="DeveloperToolsCLI"   ;; # Lion
+#   *10.6*)  cmdline_version="DeveloperToolsCLILeo"
+#            fail "Outdated OS. Considering upgrading before continuing." true;; # Snow Leopard
+#            # Force the user to upgrade if they're below 10.6
+#   *) fail "Sorry! You'll have to upgrade your OS to $MINIMUM_MAC_OS or above." true; exit 1;;
+# esac
 
-# Check for Command Line Tools based on OS versions
-if [ ! -z $(pkgutil --pkgs=com.apple.pkg.$cmdline_version) ]; then
-  show "Command Line Tools are installed!"
-elif [[ $OS_VERSION == *10.6** ]]; then
-  fail "Command Line Tools are not installed!" true
-  fail "  Downloading and installing the GCC compiler."
-  fail "  When you're done rerun the Installfest script..."
-  curl -OLk https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.6.pkg
-  open GCC-10.6.pkg
-  exit 1
-elif [[ $OS_VERSION == *10.7* ]] || [[ $OS_VERSION == *10.8* ]]; then
-  fail "Command Line Tools are not installed!" true
-  fail "Register for a Developer Account"
-  fail "  Download the Command Lion Tools from:"
-  fail "    https://developer.apple.com/downloads/index.action"
-  fail "  and then rerun the Installfest script..."
-  exit 1
-else
-  fail "Command Line Tools are not installed!" true
-  fail "  Running 'xcode-select --install' Please click continue!"
-  fail "  After installing please rerun the Installfest script..."
-  xcode-select --install
-  exit 1
-fi
+# # Check for Command Line Tools based on OS versions
+# if [ ! -z $(pkgutil --pkgs=com.apple.pkg.$cmdline_version) ]; then
+#   show "Command Line Tools are installed!"
+# elif [[ $OS_VERSION == *10.6** ]]; then
+#   fail "Command Line Tools are not installed!" true
+#   fail "  Downloading and installing the GCC compiler."
+#   fail "  When you're done rerun the Installfest script..."
+#   curl -OLk https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.6.pkg
+#   open GCC-10.6.pkg
+#   exit 1
+# elif [[ $OS_VERSION == *10.7* ]] || [[ $OS_VERSION == *10.8* ]]; then
+#   fail "Command Line Tools are not installed!" true
+#   fail "Register for a Developer Account"
+#   fail "  Download the Command Lion Tools from:"
+#   fail "    https://developer.apple.com/downloads/index.action"
+#   fail "  and then rerun the Installfest script..."
+#   exit 1
+# else
+#   fail "Command Line Tools are not installed!" true
+#   fail "  Running 'xcode-select --install' Please click continue!"
+#   fail "  After installing please rerun the Installfest script..."
+#   xcode-select --install
+#   exit 1
+# fi
 
 
 
