@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# brew cask init
+brew tap caskroom/cask
+brew tap caskroom/fonts
+
 # command line programs
 brew install archey
 brew install awscli
@@ -25,10 +29,6 @@ brew install wireshark
 brew install wget
 brew install yarn
 brew install youtube-dl
-
-# brew cask init
-brew tap caskroom/cask
-# brew tap caskroom/fonts
 
 # GUI programs
 brew cask install appcleaner
