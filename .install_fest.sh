@@ -575,9 +575,6 @@ show "Complete!"
 inform "Installing command-line tools via Homebrew (git, node, vim, etc.)..." true
 toolpkglist=(
 
-  # Archey is a small graphical system information display for macOS
-  # archey
-
   # Official Amazon AWS command-line interface
   awscli
 
@@ -607,8 +604,8 @@ toolpkglist=(
   # Node is a JavaScript runtime environment built on V8 for building network applications
   node
 
-  # Node Version Manager
-  # nvm
+  # Node version management
+  n
 
   # PostgreSQL is a object-relational database system
   postgresql
@@ -628,39 +625,33 @@ toolpkglist=(
   # Graphical network analyzer and capture tool
   wireshark
 
-  # # Run Windows applications without a copy of Microsoft Windows
-  # wine
-
   # Wget is an internet file retriever
   wget
-
-  # JavaScript package manager
-  # yarn
 )
 
 brew install ${toolpkglist[@]}
 show "Complete!"
 
 
-# #-------------------------------------------------------------------------------
-# # Use Homebrew to install command-line games & entertainment
-# #-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Use Homebrew to install command-line games & entertainment
+#-------------------------------------------------------------------------------
 
-# inform "Installing games and entertainment via Homebrew (nethack, rtv, etc.)..." true
-# gamepkglist=(
+inform "Installing games and entertainment via Homebrew (nethack, rtv, etc.)..." true
+gamepkglist=(
 
-#   # Nethack is a terminal-based, single-player roguelike video game
-#   nethack
+  # Nethack is a terminal-based, single-player roguelike video game
+  nethack
 
-#   # Command-line Reddit client
-#   rtv
+  # Command-line Reddit client
+  rtv
 
-#   # Download YouTube videos from the command-line
-#   youtube-dl
-# )
+  # Download YouTube videos from the command-line
+  youtube-dl
+)
 
-# brew install ${gamepkglist[@]}
-# show "Complete!"
+brew install ${gamepkglist[@]}
+show "Complete!"
 
 
 #-------------------------------------------------------------------------------
@@ -672,29 +663,17 @@ coreprglist=(
   # AppCleaner helps to thoroughly uninstall unwanted apps
   appcleaner
 
-  # Dropbox is a secure file sharing and storage solution
-  dropbox
-
-  # Caffeine prevents your Mac from automatically going to sleep
-  # caffeine
-
   # Cyberduck is an FTP client
   cyberduck
 
   # Firefox is an open-source web browser developed by Mozilla Foundation
   firefox
 
-  # Flux is a screen dimmer
-  # flux
-
   # Desktop app for git and github
-  # github
+  github
 
   # Google Chrome is a web browser developed by Google
   google-chrome
-
-  # Iterm2 is a terminal emulator for MacOS
-  # iterm2
 
   # Postman is an API Development Environment
   postman
@@ -702,11 +681,14 @@ coreprglist=(
   # Sublime Text is a text editor
   sublime-text
 
+  # Visual Studio is a text editor
+  visual-studio-code
+
+  # Atom is a text editor
+  atom
+
   # VNC Viewer is a program for remote computer control
   vnc-viewer
-
-  # Zeplin is a collaboration app for UI designers and frontend developers
-  # zeplin
 )
 
 brew cask install ${coreprglist[@]}
@@ -720,7 +702,7 @@ inform "Installing extra GUI programs via Homebrew (google-chrome, iterm2, subli
 extraprglist=(
 
   # Skype is a telecommunications app
-  # skype
+  skype
 
   # Slack is a cloud-based collaboration and messaging app
   slack
@@ -732,7 +714,7 @@ extraprglist=(
   vlc
 
   # Evernote robust notetaking app
-  # evernote
+  evernote
 
   # Private Internet Access is a Virtual Private Network
   private-internet-access
@@ -757,25 +739,6 @@ inform "Installing Git & Hub via Homebrew..." true
 brew install git # git is a distributed revision control system
 brew install hub # additional Git commands
 show "Complete!"
-
-#-------------------------------------------------------------------------------
-# Install Git Completion (git_completion.sh)
-#-------------------------------------------------------------------------------
-
-# inform "Installing a bash script to support Git CLI tab-completion..." true
-
-# GIT_COMPLETION_URL="https://raw.githubusercontent.com/git/git/master/contrib/completion/git_completion.bash"
-# GIT_COMPLETION_FILE="$HOME/.git_completion.bash"
-
-# curl -o "$GIT_COMPLETION_FILE" "$GIT_COMPLETION_URL"
-
-# if [[ -e "$GIT_COMPLETION_FILE" ]]; then
-#   show "File '$GIT_COMPLETION_FILE' created!"
-# else
-#   fail "${GIT_COMPLETION_FILE} not created... " true
-#   pause_awhile "Ask an instructor for help if necessary. "
-# fi
-
 
 #-------------------------------------------------------------------------------
 # Add user's Git info to ~/.gitconfig (git_configure.sh)
