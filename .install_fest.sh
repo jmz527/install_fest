@@ -691,7 +691,7 @@ coreprglist=(
   vnc-viewer
 )
 
-brew cask install ${coreprglist[@]}
+brew install --cask ${coreprglist[@]}
 show "Complete!"
 
 
@@ -726,7 +726,7 @@ extraprglist=(
   transmission
 )
 
-brew cask install ${extraprglist[@]}
+brew install --cask ${extraprglist[@]}
 show "Complete!"
 
 
