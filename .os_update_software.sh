@@ -19,10 +19,15 @@ fi
 
 CPU=$(sysctl -n machdep.cpu.brand_string)
 # removes (R) and (TM) from the CPU name so it fits in a standard 80 window
-cpu=$(echo "$CPU" | awk '$1=$1' | sed 's/([A-Z]\{1,2\})//g')
+CPU=$(echo "$CPU" | awk '$1=$1' | sed 's/([A-Z]\{1,2\})//g')
+
+echo $CPU
 
 if [[ $CPU == 'Apple M1' ]]; then
   echo "Your computer is using an Apple M1 chip";
+  echo $CPU;
+elif [[ $CPU =~ 'Intel Core' ]]; then
+  echo "Your computer is using an Intel Core chip";
   echo $CPU;
 fi
 
